@@ -1,0 +1,7 @@
+.vagrant
+.idea
+.env
+
+composer.lock
+
+/vendor
