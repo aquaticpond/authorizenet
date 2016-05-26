@@ -4,59 +4,67 @@ namespace Aquatic\AuthorizeNet;
 
 \ini_set("soap.wsdl_cache_enabled", "0");
 
+use stdClass;
 use SoapClient;
-use Aquatic\AuthorizeNet\Request\Contract as RequestContract;
-use Aquatic\AuthorizeNet\Response\Contract as ResponseContract;
+use Aquatic\AuthorizeNet\Request\Contract;
 
-abstract class Request implements RequestContract
+abstract class Request implements Contract
 {
     protected $_credentials = [
-        'MerchantAuthentication' => [
-            'name' => null,
-            'transactionKey' => null,
-        ],
+        'id' => null,
+        'key' => null
     ];
 
-    protected $_validationMode = [
-        'validationMode' => null
-    ];
-
+    protected $_validationMode = 'liveMode';
+    protected $_isQA = false;
     protected $_request = [];
+    protected $_response;
     protected $_wsdl;
     protected $_soapMethod;
-    protected $_isQA = false;
+    protected $_soapInstance;
 
-    public function send(ResponseContract $response_parser = null): ResponseContract
+    public function sendRequest(): Contract
     {
-        $soap = new SoapClient($this->getWsdl(), ['trace' => 1]);
-
         $method = $this->_soapMethod;
-        $result = $soap->$method($this->getRequest());
-        
-        if(!$response_parser)
-            $response_parser = new \Aquatic\AuthorizeNet\Response;
-        
-        return $response_parser->parse($result);
-    }
 
-    public function setCredentials(string $name, string $key): RequestContract
-    {
-        $this->_credentials['merchantAuthentication']['name'] = $name;
-        $this->_credentials['merchantAuthentication']['transactionKey'] = $key;
+        $this->_response = $this->getSoap()
+                                ->$method($this->getRequest());
 
         return $this;
     }
 
-    public function setQA(bool $isQA = false)
+    public function parseResponse(): Contract
+    {
+        $response = new stdClass();
+
+        $wrapper = $this->_soapMethod.'Result';
+        foreach($this->_response->$wrapper as $property => $value)
+            $response->$property = $value;
+
+
+        $this->_response = $response;
+
+        return $this;
+    }
+
+    public function setCredentials(string $id, string $key): Contract
+    {
+        $this->_credentials['id'] = $id;
+        $this->_credentials['key']  = $key;
+
+        return $this;
+    }
+
+    public function setQA(bool $isQA = false): Contract
     {
         $this->_isQA = $isQA;
 
         return $this;
     }
 
-    public function setValidationMode(string $mode = null)
+    public function setValidationMode(string $mode = null): Contract
     {
-        $mode = $mode ?? $this->_validationMode['validationMode'];
+        $mode = $mode ?? $this->_validationMode;
 
         if(!$mode && $this->_isQA)
             $mode = 'testMode';
@@ -64,20 +72,43 @@ abstract class Request implements RequestContract
         if(!$mode && !$this->_isQA)
             $mode = 'liveMode';
 
-        $this->_validationMode = ['validationMode' => $mode];
+        $this->_validationMode = $mode;
 
         return $this;
     }
 
     public function getRequest(): array
     {
-        return array_merge($this->_credentials, $this->_request, $this->_validationMode);
+        $credentials = [
+            'merchantAuthentication' => [
+                'name' => $this->_credentials['id'],
+                'transactionKey' => $this->_credentials['key'],
+            ],
+        ];
+
+        $validationMode = [
+            'validationMode' => $this->_validationMode
+        ];
+
+        return array_merge($credentials, $this->_request, $validationMode);
+    }
+
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+    public function getSoap(): SoapClient
+    {
+        if(!($this->_soapInstance instanceof SoapClient))
+            $this->_soapInstance = new SoapClient($this->getWsdl(), ['trace' => 1]);
+
+        return $this->_soapInstance;
     }
 
     public function getWsdl(): string
     {
         $qa = $this->_isQA ? '-test' : '';
-        $wsdl = array_slice(explode('\\', static::class),-2,1)[0];
-        return dirname(__FILE__)."/wsdl/{$wsdl}{$qa}.wsdl";
+        return dirname(__FILE__)."/wsdl/{$this->_wsdl}{$qa}.wsdl";
     }
 }

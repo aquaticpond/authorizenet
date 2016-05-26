@@ -2,12 +2,19 @@
 
 namespace Aquatic\AuthorizeNet\Request;
 
-use Aquatic\AuthorizeNet\Response\Contract as ResponseContract;
+use SoapClient;
 
 interface Contract
 {
-    public function getRequest(): array;
     public function setCredentials(string $name, string $key): Contract;
-    public function send(): ResponseContract;
+    public function setValidationMode(string $mode = null): Contract;
+    public function setQA(bool $isQA = false): Contract;
+
+    public function sendRequest(): Contract;
+    public function parseResponse(): Contract;
+
+    public function getSoap(): SoapClient;
     public function getWsdl(): string;
+    public function getRequest(): array;
+    public function getResponse();
 }
