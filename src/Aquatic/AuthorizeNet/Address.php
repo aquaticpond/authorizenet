@@ -17,7 +17,7 @@ class Address implements Contract
            $country = '';
 
 
-    public function __construct(mixed $source, array $map = [])
+    public function __construct($source, array $map = [])
     {
         if(!(is_array($source) || is_object($source)))
             throw new Exception("You must pass an array or object as the source data for an address.");
