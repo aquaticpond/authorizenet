@@ -9,6 +9,7 @@ class CreateCustomerShippingAddress extends Request
 {
     protected $_soapMethod = 'CreateCustomerShippingAddress';
     protected $_wsdl = 'CIM';
+    protected $_validationMode = 'none';
 
     public function __construct(int $profile_id, Address $address)
     {
@@ -26,7 +27,5 @@ class CreateCustomerShippingAddress extends Request
                 'phoneNumber'=> $address->getPhoneNumber(),
             ],
         ];
-
-        $this->setValidationMode('none');
     }
 }

@@ -8,6 +8,7 @@ class CreateCustomerProfile extends Request
 {
     protected $_soapMethod = 'CreateCustomerProfile';
     protected $_wsdl = 'CIM';
+    protected $_validationMode = 'none';
     
     public function __construct(string $id, string $email, string $description = null)
     {
@@ -18,7 +19,5 @@ class CreateCustomerProfile extends Request
                 'email' => $email,
             ],
         ];
-
-        $this->setValidationMode('none');
     }
 }
