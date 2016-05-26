@@ -37,4 +37,4 @@ $address = new \Aquatic\AuthorizeNet\Address($source, $map);
 var_dump($address);
 
 // And make a request with the example facade
-$response = \My\AuthorizeNet::createCustomerShippingAddress(123456, $address);
+$response = AuthorizeNet::createCustomerShippingAddress(123456, $address);
