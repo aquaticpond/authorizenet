@@ -1,6 +1,8 @@
 <?php
 
+use Aquatic\AuthorizeNet\Contract\Address;
 use Aquatic\AuthorizeNet\CIM\CreateCustomerProfile;
+use Aquatic\AuthorizeNet\CIM\CreateCustomerShippingAddress;
 
 // Facade for AuthorizeNet requests
 class AuthorizeNet
@@ -18,10 +20,12 @@ class AuthorizeNet
     {
         return (new \My\CreateAProfile($customer_id, $email))->getResponse();
     }
+
+    public static function createCustomerShippingAddress(int $customer_id, Address $address)
+    {
+        return (new CreateCustomerShippingAddress($customer_id, $address))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
 }
-
-// Call from your application to receive parsed response
-// AuthorizeNet::createCustomerProfile(123, 'herp@derpingt.on', 'guest');
-
-// Call from your application to receive your custom parsed response
-// AuthorizeNet::yerACustomerProfileHarry(321, 'harry@hogwar.ts');
