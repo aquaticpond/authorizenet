@@ -14,24 +14,26 @@ class CreateCustomerPaymentProfile extends Request
     {
         $this->_request = [
             'customerProfileId' => $id,
-            'billTo' => [
-                'firstName' => $address->getFirstName(),
-                'lastName'  => $address->getLastName(),
-                'company'   => $address->getCompany(),
-                'address'   => $address->getStreet(),
-                'city'      => $address->getCity(),
-                'state'     => $address->getState(),
-                'zip'       => $address->getZip(),
-                'country'   => $address->getCountry(),
-                'phoneNumber' => $address->getPhoneNumber()
-            ],
-            'payment' => [
-                'creditCard' => [
-                    'cardNumber' => $card_number,
-                    'expirationDate' => $expiration_date,
-                    'cardCode'       => $cvv,
-                ]
-            ],
+            'paymentProfile' => [
+                'billTo' => [
+                    'firstName' => $address->getFirstName(),
+                    'lastName'  => $address->getLastName(),
+                    'company'   => $address->getCompany(),
+                    'address'   => $address->getStreet(),
+                    'city'      => $address->getCity(),
+                    'state'     => $address->getState(),
+                    'zip'       => $address->getZip(),
+                    'country'   => $address->getCountry(),
+                    'phoneNumber' => $address->getPhoneNumber()
+                ],
+                'payment' => [
+                    'creditCard' => [
+                        'cardNumber' => $card_number,
+                        'expirationDate' => $expiration_date,
+                        'cardCode'       => $cvv,
+                    ]
+                ],
+            ]
         ];
     }
 }
