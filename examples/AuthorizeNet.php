@@ -1,9 +1,15 @@
 <?php
 
 use Aquatic\AuthorizeNet\Contract\Address;
-use Aquatic\AutorizeNet\Contract\CreditCard;
+use Aquatic\AuthorizeNet\Contract\CreditCard;
 use Aquatic\AuthorizeNet\CIM\CreateCustomerProfile;
 use Aquatic\AuthorizeNet\CIM\CreateCustomerShippingAddress;
+use Aquatic\AuthorizeNet\CIM\CreateCustomerPaymentProfile;
+use Aquatic\AuthorizeNet\CIM\UpdateCustomerPaymentProfile;
+use Aquatic\AuthorizeNet\CIM\Authorize;
+use Aquatic\AuthorizeNet\CIM\Capture;
+use Aquatic\AuthorizeNet\CIM\Refund;
+use Aquatic\AuthorizeNet\CIM\Void;
 
 // Facade for AuthorizeNet requests
 class AuthorizeNet
@@ -32,7 +38,7 @@ class AuthorizeNet
     
     public static function createCustomerPaymentProfile(int $customer_id, CreditCard $card, Address $address)
     {
-        return (new UpdateCustomerPaymentProfile($customer_id, $card, $address))
+        return (new CreateCustomerPaymentProfile($customer_id, $card, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
             ->parseResponse();
@@ -41,6 +47,38 @@ class AuthorizeNet
     public static function updateCustomerPaymentProfile(int $customer_id, int $payment_profile_id, CreditCard $card, Address $address)
     {
         return (new UpdateCustomerPaymentProfile($customer_id, $payment_profile_id, $card, $address))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
+
+    public static function authorize(float $amount, int $customer_id, int $payment_profile_id, string $invoice_id, int $cvv = null)
+    {
+        return (new Authorize($amount, $customer_id, $payment_profile_id, $invoice_id, $cvv))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
+
+    public static function capture(float $amount, int $transaction_id)
+    {
+        return (new Capture($amount, $transaction_id))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
+
+    public static function refund(float $amount, int $transaction_id)
+    {
+        return (new Refund($amount, $transaction_id))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
+
+    public static function void(int $transaction_id)
+    {
+        return (new Void($transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
             ->parseResponse();
