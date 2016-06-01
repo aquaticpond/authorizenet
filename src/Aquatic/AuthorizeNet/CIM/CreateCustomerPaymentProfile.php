@@ -11,7 +11,7 @@ class CreateCustomerPaymentProfile extends Request
     protected $_soapMethod = 'CreateCustomerPaymentProfile';
     protected $_wsdl = 'CIM';
     
-    public function __construct(int $id, CreditCad $card, Address $address)
+    public function __construct(int $id, CreditCard $card, Address $address)
     {
         $this->_request = [
             'customerProfileId' => $id,
