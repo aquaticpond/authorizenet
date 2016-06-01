@@ -28,4 +28,20 @@ class AuthorizeNet
             ->sendRequest()
             ->parseResponse();
     }
+    
+    public static function createCustomerPaymentProfile(int $customer_id, string $card_number, string $expiration_date, string $cvv, Address $address)
+    {
+        return (new UpdateCustomerPaymentProfile($customer_id, $card_number, $expiration_date, $cvv, $address))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
+
+    public static function updateCustomerPaymentProfile(int $customer_id, int $payment_profile_id, string $card_number, string $expiration_date, string $cvv, Address $address)
+    {
+        return (new UpdateCustomerPaymentProfile($customer_id, $payment_profile_id, $card_number, $expiration_date, $cvv, $address))
+            ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->sendRequest()
+            ->parseResponse();
+    }
 }
