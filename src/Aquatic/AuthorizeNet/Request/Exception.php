@@ -1,6 +1,6 @@
 <?php
 
-namespace Aquatic\AuthorizeNet\Cim\Request;
+namespace Aquatic\AuthorizeNet\Request;
 
 class Exception extends \RuntimeException
 {

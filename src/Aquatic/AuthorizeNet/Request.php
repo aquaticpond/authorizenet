@@ -47,7 +47,7 @@ abstract class Request implements Contract
         $this->_response = $response;
 
         foreach($response->messages as $message)
-            if($message->code != static::SUCCESS_MESSAGE)
+            if($message->code != static::SUCCESS_CODE)
                 throw new Exception($message->text);
 
         return $this;
