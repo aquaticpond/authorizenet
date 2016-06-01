@@ -7,9 +7,12 @@ namespace Aquatic\AuthorizeNet;
 use stdClass;
 use SoapClient;
 use Aquatic\AuthorizeNet\Request\Contract;
+use Aquatic\AuthorizeNet\Request\Exception;
 
 abstract class Request implements Contract
 {
+    const SUCCESS_CODE = 'I00001';
+
     protected $_credentials = [
         'id' => null,
         'key' => null
@@ -41,8 +44,11 @@ abstract class Request implements Contract
         foreach($this->_response->$wrapper as $property => $value)
             $response->$property = $value;
 
-
         $this->_response = $response;
+
+        foreach($response->messages as $message)
+            if($message->code != static::SUCCESS_MESSAGE)
+                throw new Exception($message->text);
 
         return $this;
     }
