@@ -4,13 +4,14 @@ namespace Aquatic\AuthorizeNet\CIM;
 
 use Aquatic\AuthorizeNet\Request;
 use Aquatic\AuthorizeNet\Contract\Address;
+use Aquatic\AuthorizeNet\Contract\CreditCard;
 
-class CreateCustomerPaymentProfile extends Request
+class UpdateCustomerPaymentProfile extends Request
 {
     protected $_soapMethod = 'UpdateCustomerPaymentProfile';
     protected $_wsdl = 'CIM';
     
-    public function __construct(int $customer_id, int $payment_profile_id, string $card_number, string $expiration_date, string $cvv, Address $address)
+    public function __construct(int $customer_id, int $payment_profile_id, CreditCard $card, Address $address)
     {
         $this->_request = [
             'customerProfileId' => $customer_id,
@@ -29,9 +30,9 @@ class CreateCustomerPaymentProfile extends Request
                 ],
                 'payment' => [
                     'creditCard' => [
-                        'cardNumber' => $card_number,
-                        'expirationDate' => $expiration_date,
-                        'cardCode'       => $cvv,
+                        'cardNumber' => $card->getNumber(),
+                        'expirationDate' => $card->getExpirationDate(),
+                        'cardCode'       => $card->getCVV(),
                     ]
                 ],
             ]
