@@ -33,7 +33,8 @@ class AuthorizeNet
         return (new CreateCustomerShippingAddress($customer_id, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
     
     public static function createCustomerPaymentProfile(int $customer_id, CreditCard $card, Address $address)
@@ -41,7 +42,8 @@ class AuthorizeNet
         return (new CreateCustomerPaymentProfile($customer_id, $card, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
 
     public static function updateCustomerPaymentProfile(int $customer_id, int $payment_profile_id, CreditCard $card, Address $address)
@@ -49,7 +51,8 @@ class AuthorizeNet
         return (new UpdateCustomerPaymentProfile($customer_id, $payment_profile_id, $card, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
 
     public static function authorize(float $amount, int $customer_id, int $payment_profile_id, string $invoice_id, int $cvv = null)
@@ -57,7 +60,8 @@ class AuthorizeNet
         return (new Authorize($amount, $customer_id, $payment_profile_id, $invoice_id, $cvv))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
 
     public static function capture(float $amount, int $transaction_id)
@@ -65,7 +69,8 @@ class AuthorizeNet
         return (new Capture($amount, $transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
 
     public static function refund(float $amount, int $transaction_id)
@@ -73,7 +78,8 @@ class AuthorizeNet
         return (new Refund($amount, $transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
 
     public static function void(int $transaction_id)
@@ -81,6 +87,7 @@ class AuthorizeNet
         return (new Void($transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->sendRequest()
-            ->parseResponse();
+            ->parseResponse()
+            ->getResponse();
     }
 }
