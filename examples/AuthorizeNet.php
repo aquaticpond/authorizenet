@@ -60,7 +60,7 @@ class AuthorizeNet
             ->getResponse();
     }
 
-    public static function authorize(float $amount, int $customer_id, int $payment_profile_id, string $invoice_id, int $cvv = null)
+    public static function authorize(float $amount, int $customer_id, int $payment_profile_id, string $invoice_id = '', int $cvv = '')
     {
         return (new Authorize($amount, $customer_id, $payment_profile_id, $invoice_id, $cvv))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
