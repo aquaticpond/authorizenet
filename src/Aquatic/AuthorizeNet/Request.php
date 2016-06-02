@@ -41,7 +41,12 @@ abstract class Request implements Contract
 
         $wrapper = $this->_soapMethod.'Result';
         foreach($this->_response->$wrapper as $property => $value)
-            $response->$property = $value;
+        {
+            if($property == 'directResponse')
+                $response->parseTransactionResponse($value);
+            else
+                $response->$property = $value;
+        }
 
         $this->_response = $response;
 
