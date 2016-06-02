@@ -14,10 +14,12 @@ use Aquatic\AuthorizeNet\CIM\Void;
 // Facade for AuthorizeNet requests
 class AuthorizeNet
 {
+
     public static function createCustomerProfile(string $customer_id, string $email, string $description = null)
     {
         return (new CreateCustomerProfile($customer_id, $email, $description))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -32,6 +34,7 @@ class AuthorizeNet
     {
         return (new CreateCustomerShippingAddress($customer_id, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -41,6 +44,7 @@ class AuthorizeNet
     {
         return (new CreateCustomerPaymentProfile($customer_id, $card, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -50,6 +54,7 @@ class AuthorizeNet
     {
         return (new UpdateCustomerPaymentProfile($customer_id, $payment_profile_id, $card, $address))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -59,6 +64,7 @@ class AuthorizeNet
     {
         return (new Authorize($amount, $customer_id, $payment_profile_id, $invoice_id, $cvv))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -68,6 +74,7 @@ class AuthorizeNet
     {
         return (new Capture($amount, $transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -77,6 +84,7 @@ class AuthorizeNet
     {
         return (new Refund($amount, $transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
@@ -86,6 +94,7 @@ class AuthorizeNet
     {
         return (new Void($transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
+            ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
             ->parseResponse()
             ->getResponse();
