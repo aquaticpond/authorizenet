@@ -4,7 +4,6 @@ namespace Aquatic\AuthorizeNet;
 
 \ini_set("soap.wsdl_cache_enabled", "0");
 
-use stdClass;
 use SoapClient;
 use Aquatic\AuthorizeNet\Request\Contract;
 use Aquatic\AuthorizeNet\Request\Exception;
@@ -38,7 +37,7 @@ abstract class Request implements Contract
 
     public function parseResponse(): Contract
     {
-        $response = new stdClass();
+        $response = new Response($this, $this->_response);
 
         $wrapper = $this->_soapMethod.'Result';
         foreach($this->_response->$wrapper as $property => $value)
@@ -64,8 +63,7 @@ abstract class Request implements Contract
     public function setQA(bool $isQA = false): Contract
     {
         $this->_isQA = $isQA;
-
-        return $this;
+        return $this->setValidationMode();
     }
 
     public function setValidationMode(string $mode = null): Contract
