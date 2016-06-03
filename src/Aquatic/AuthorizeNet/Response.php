@@ -4,9 +4,10 @@ namespace Aquatic\AuthorizeNet;
 
 class Response
 {
+    const TRANSACTION_RESPONSE_DELIMITER = "|";
     const TRANSACTION_RESPONSE_MAP = [
         'response_code',
-        'response_subcode',
+        'response_sub_code',
         'response_reason_code',
         'response_reason_text',
         'authorization_code',
@@ -21,10 +22,11 @@ class Response
         'first_name',
         'last_name',
         'company',
-        'address',
+        'street',
         'city',
         'state',
         'post_code',
+        'country',
         'phone',
         'fax',
         'email_address',
@@ -44,11 +46,34 @@ class Response
         'md5',
         'cvv_response_code',
         'cavv_response_code',
+        'unused41',
+        'unused42',
+        'unused43',
+        'unused44',
+        'unused45',
+        'unused46',
+        'unused47',
+        'unused48',
+        'unused49',
+        'unused50',
         'account_number',
         'card_type',
         'split_tender_id',
         'requested_amount',
-        'balance_on_card'
+        'balance_on_card',
+        'unused56',
+        'unused57',
+        'unused58',
+        'unused59',
+        'unused60',
+        'unused61',
+        'unused62',
+        'unused63',
+        'unused64',
+        'unused65',
+        'unused66',
+        'unused67',
+        'unused68',
     ];
 
     protected $_request;
@@ -72,7 +97,7 @@ class Response
 
     public function parseTransactionResponse(string $response)
     {
-        $response = \explode(',', $response);
+        $response = \explode(static::TRANSACTION_RESPONSE_DELIMITER, $response);
         foreach(static::TRANSACTION_RESPONSE_MAP as $pos => $property)
             $this->$property = $response[$pos];
     }
