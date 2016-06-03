@@ -73,7 +73,7 @@ class Response
     public function parseTransactionResponse(string $response)
     {
         $response = \explode(',', $response);
-        foreach(TRANSACTION_RESPONSE_MAP as $pos => $property)
+        foreach(static::TRANSACTION_RESPONSE_MAP as $pos => $property)
             $this->$property = $response[$pos];
     }
 
