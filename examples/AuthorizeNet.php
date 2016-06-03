@@ -80,9 +80,9 @@ class AuthorizeNet
             ->getResponse();
     }
 
-    public static function refund(float $amount, int $transaction_id)
+    public static function refund(float $amount, int $customer_id, int $payment_profile_id, int $transaction_id)
     {
-        return (new Refund($amount, $transaction_id))
+        return (new Refund($amount, $customer_id, $payment_profile_id, $transaction_id))
             ->setCredentials(getenv('AUTHORIZENET_ID'), getenv('AUTHORIZENET_KEY'))
             ->setQA(getenv('AUTHORIZENET_QA'))
             ->sendRequest()
