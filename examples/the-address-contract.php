@@ -1,5 +1,21 @@
 <?php
 
+if(!function_exists('q'))
+{
+    function q($wat, $label)
+    {
+        echo "<strong>{$label}</strong>";
+        echo '<pre>';
+        var_dump($wat);
+        echo '</pre>';
+    }
+}
+
+use Aquatic\AuthorizeNet;
+use Aquatic\AuthorizeNet\Address;
+use Aquatic\AuthorizeNet\Request\Exception as RequestException;
+
+
 // Maybe your source data is an array
 $arraySource = [
     'name' => 'herp',
@@ -33,8 +49,14 @@ $map = [
 ];
 
 // And then instantiate an address implementing the required address contract with the map (if needed)
-$address = new \Aquatic\AuthorizeNet\Address($objectSource, $map);
-var_dump($address);
+$address = new Address($objectSource, $map);
 
 // And make a request with the example facade
-$response = AuthorizeNet::createCustomerShippingAddress(123456, $address);
+try
+{
+    $response = AuthorizeNet::createCustomerShippingAddress(123456, $address);
+}
+catch(RequestException $e)
+{
+    q($e->getMessage());
+}

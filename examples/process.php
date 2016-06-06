@@ -1,7 +1,25 @@
 <?php
 
+if(!function_exists('q'))
+{
+    function q($wat, $label)
+    {
+        echo "<strong>{$label}</strong>";
+        echo '<pre>';
+        var_dump($wat);
+        echo '</pre>';
+    }
+}
+
+use Aquatic\AuthorizeNet;
+use Aquatic\AuthorizeNet\Address;
+use Aquatic\AuthorizeNet\CreditCard;
 use Aquatic\AuthorizeNet\Request\Exception as RequestException;
 use Aquatic\AuthorizeNet\Transaction\Exception as TransactionException;
+
+// set us up the credentials
+$is_qa = 1; //qa mode set validationMode parameter to testMode
+AuthorizeNet::credentials('api_id', 'api_key', $is_qa);
 
 //  create customer profile
 try
@@ -9,7 +27,7 @@ try
     $internal_customer_id = 1;
     $email = "harry@hogwarts.com";
     $description = "yer a customer harry!";
-    $result = \Aquatic\AuthorizeNet::createCustomerProfile($internal_customer_id, $email, $description);
+    $result = AuthorizeNet::createCustomerProfile($internal_customer_id, $email, $description);
     $customer_id = $result->customerProfileId;
 }
 catch(RequestException $e)
@@ -40,9 +58,9 @@ try
         'wizard_phone' => 'phone_number'
     ];
 
-    $card = new \Aquatic\AuthorizeNet\CreditCard(4007000000027, 123, '2019-04'); // visa testing number
-    $address = new \Aquatic\AuthorizeNet\Address($arraySource, $map);
-    $result = \Aquatic\AuthorizeNet::createCustomerPaymentProfile($customer, $card, $address);
+    $card = new CreditCard(4007000000027, 123, '2019-04'); // visa testing number
+    $address = new Address($arraySource, $map);
+    $result = AuthorizeNet::createCustomerPaymentProfile($customer, $card, $address);
     $payment_profile = $result->customerPaymentProfileId;
     q($result, 'result!');
 }
@@ -63,7 +81,7 @@ catch(TransactionException $e)
 try
 {
     $amount = 30.50;
-    $result = \Aquatic\AuthorizeNet::authorize($amount, $customer, $payment_profile, 'yer-an-invoice-harry');
+    $result = AuthorizeNet::authorize($amount, $customer, $payment_profile, 'yer-an-invoice-harry');
     q($result, 'result!');
 }
 catch(RequestException $e)
@@ -81,7 +99,7 @@ catch(TransactionException $e)
 // capture
 try
 {
-    $result = \Aquatic\AuthorizeNet::capture($amount, $transaction_id);
+    $result = AuthorizeNet::capture($amount, $transaction_id);
     q($result, 'result!');
 }
 catch(RequestException $e)

@@ -1,14 +1,18 @@
 <?php
 
+use AuthorizeNet as MyFacade;
+use Aquatic\AuthorizeNet;
+use Aquatic\AuthorizeNet\CIM\CreateCustomerProfile;
+
 // Use the facade to succinctly receive a parsed response
-$response = \Aquatic\AuthorizeNet::credentials('api_id', 'api_key')->createCustomerProfile(123, 'herp@derpingt.on', 'Yer a profile harry!');
+$response = AuthorizeNet::credentials('api_id', 'api_key')->createCustomerProfile(123, 'herp@derpingt.on', 'Yer a profile harry!');
 
 // Use the example facade to succinctly receive your custom \My\CreateAProfile parsed response
 // Don't need to set credentials because they are set in the custom facade
-$customResponse = AuthorizeNet::yerACustomerProfileHarry(321, 'harry@hogwar.ts');
+$customResponse = MyFacade::yerACustomerProfileHarry(321, 'harry@hogwar.ts');
 
 // Or make a request directly with the fluent API
-$request = (new \Aquatic\AuthorizeNet\CIM\CreateCustomerProfile(432, 'herp@derpingt.on'))
+$request = (new CreateCustomerProfile(432, 'herp@derpingt.on'))
                 ->setCredentials('your', 'credentials')
                 ->sendRequest();
 
