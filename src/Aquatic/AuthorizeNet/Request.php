@@ -52,7 +52,7 @@ abstract class Request implements Contract
 
         foreach($response->messages as $message)
             if($message->code != static::SUCCESS_CODE)
-                throw new Exception($message->text, $message->code);
+                throw new Exception($message->text, (int) (preg_replace("/[^0-9]/", '', $message->code)));
 
         return $this;
     }
