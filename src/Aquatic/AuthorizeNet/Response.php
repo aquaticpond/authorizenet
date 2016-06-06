@@ -2,6 +2,8 @@
 
 namespace Aquatic\AuthorizeNet;
 
+use Aquatic\AuthorizeNet\Transaction\Exception;
+
 class Response
 {
     const TRANSACTION_RESPONSE_DELIMITER = "|";
@@ -100,6 +102,10 @@ class Response
         $response = \explode(static::TRANSACTION_RESPONSE_DELIMITER, $response);
         foreach(static::TRANSACTION_RESPONSE_MAP as $pos => $property)
             $this->$property = $response[$pos];
+
+        if($this->response_reason_code != 1)
+            throw new Exception($this->response_reason_text, $this->response_reason_code);
+
     }
 
 }
