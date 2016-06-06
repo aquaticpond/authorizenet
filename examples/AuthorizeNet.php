@@ -100,3 +100,15 @@ class AuthorizeNet
             ->getResponse();
     }
 }
+
+
+if(!function_exists('q'))
+{
+    function q($wat, $label)
+    {
+        echo "<strong>{$label}</strong>";
+        echo '<pre>';
+        var_dump($wat);
+        echo '</pre>';
+    }
+}
