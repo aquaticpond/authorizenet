@@ -9,10 +9,6 @@ class CreateAProfile extends CreateCustomerProfile
     public function __construct(string $id, string $email)
     {
         parent::__construct($id, $email, 'yer a customer harry!');
-
-        $this->setCredentials('rubeus', 'hagrid')
-             ->sendRequest()
-             ->parseResponse();
     }
 
     public function parseResponse()
