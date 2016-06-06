@@ -52,7 +52,7 @@ abstract class Request implements Contract
 
         foreach($response->messages as $message)
             if($message->code != static::SUCCESS_CODE)
-                throw new Exception($message->text);
+                throw new Exception($message->text, $message->code);
 
         return $this;
     }
